@@ -1,0 +1,5 @@
+
+for i in t/*.t; do
+    echo -e "$i:\n"
+    php4 -q -d 'include_path=.:/usr/share/pear' $i
+done
