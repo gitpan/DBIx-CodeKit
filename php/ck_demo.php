@@ -21,6 +21,16 @@ function ck_demo() {
     $codekit = new CodeKit($dbh);
 
     $title = "CodeKit Code Select PHP Demo";
+
+    $mycurrency = $_POST['currency'];
+    $day = $_POST['day'];
+    $country = $_POST['country'];
+    if (!is_array($country)) $country = array();
+    $countrystr = join(',', $country);
+    $month = $_POST['month'];
+    if (!is_array($month)) $month = array();
+    $monthstr = join(',', $month);
+
     print "
     <html>
     <head>
@@ -31,6 +41,7 @@ function ck_demo() {
     link=\"#0000cc\" vlink=\"#0066ff\" alink=\"#ffcc00\">
 
     <center>
+    <form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
     <table border=\"1\" width=\"600\" cellpadding=\"20\">
     <tr>
     <td>
@@ -55,65 +66,67 @@ function ck_demo() {
     <p>
     This page shows off the CodeKit code select functions.
     Select various combinations of countries and months then
-    click [Test CodeKit] at the bottom.
+    click [Test CodeKit] at the bottom to see the selected
+    codes:
+
+    <p>
+    <table border=\"3\" cellpadding=\"10\">
+    <tr><th>Variable</th><th>Code(s)</th></tr>
+    <tr><td>\$mycurrency</td><td>'$mycurrency'</td></tr>
+    <tr><td>day</td><td>'$day'</td></tr>
+    <tr><td>country</td><td>[$countrystr]</td></tr>
+    <tr><td>month</td><td>[$monthstr]</td></tr>
+    </table>
 
     <p>
     Have fun!
-
-    </td></tr><tr><td>
-    <form action=\"" . $_SERVER['PHP_SELF'] . "\" method=\"post\">
     ";
 
     #
     # Currency Dropdown.
     #
 
-    $mycurrency = $_POST['currency'];
-    print "
+    print "</td></tr><tr><td>
     <b>Select a currency.</b>
     <p>Pass in a specific code value.
     <pre>
 print \$codekit->select('currency', array(
-                         value =&gt; \$mycurrency
+                       'value' =&gt; \$mycurrency
 ));
     </pre>
     \$mycurrency is '$mycurrency':
     <p>
     ";
     print $codekit->select('currency', array(
-                            value => $mycurrency
+                           'value' => $mycurrency
     ));
 
     #
     # Day Radiobox.
     #
 
-    $day = $_POST['day'];
     print "</td></tr><tr><td>
     <b>Radiobox for days of the week.</b>
     <p>Constrain choices to the weekdays (1-5).
     <br>A blank separator displays them all on one line.
     <pre>
 print \$codekit->radio('day', array(
-                        subset =&gt; array(1, 2, 3, 4, 5),
-                        sep    =&gt; ''
+                      'subset' =&gt; array(1, 2, 3, 4, 5),
+                      'sep'    =&gt; ''
 ));
     </pre>
     'day' is '$day'.
     <p>
     ";
     print $codekit->radio('day', array(
-                           subset => array(1, 2, 3, 4, 5),
-                           sep    => ''
+                          'subset' => array(1, 2, 3, 4, 5),
+                          'sep'    => ''
     ));
 
     #
     # Country Select Multiple.
     #
 
-    $country = $_POST['country'];
-    if (!is_array($country)) $country = array();
-    $countrystr = join(',', $country);
     print "</td></tr><tr><td>
     <b>Select multiple countries</b>.
     <p>Specify a window scrolling size of 10.
@@ -121,23 +134,20 @@ print \$codekit->radio('day', array(
     <br>to select multiple countries.
     <pre>
 print \$codekit->multiple('country', array(
-                           size =&gt; 10
+                         'size' =&gt; 10
 ));
     </pre>
     'country' contains [$countrystr]:
     <p>
     ";
     print $codekit->multiple('country', array(
-                              size => 10
+                             'size' => 10
     ));
 
     #
     # Month Checkbox.
     #
 
-    $month = $_POST['month'];
-    if (!is_array($month)) $month = array();
-    $monthstr = join(',', $month);
     print "</td></tr><tr><td>
     <b>Checkbox for multiple month selections.</b>
     <p>Simple no frills method call.
@@ -152,10 +162,11 @@ print \$codekit->checkbox('month');
     print "
     </td></tr><tr><td>
     <input type=submit value=\"Test CodeKit\">
-    </form>
+    &lt;-- Click here to see the updated PHP variables!
     </td>
     </tr>
     </table>
+    </form>
     </center>
     </body>
     </html>

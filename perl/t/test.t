@@ -10,6 +10,8 @@ BEGIN { plan tests => 21 };
 
 use strict;
 use warnings;
+use lib 'blib/lib';
+use lib '../blib/lib';
 use lib '..';
 use DBI;
 use DBIx::CodeKit;
@@ -63,7 +65,7 @@ ok( join(',', $ckh->get('regression', 3)), 'Wednesday,3,' );
 
 
 # Select options.
-$expect = '<select name="regression_test">
+$expect = '<select name="regression_test" onchange="submit()">
 <option value="">(None)
 <option value="1">Monday
 <option value="2" selected>Tuesday
@@ -71,24 +73,26 @@ $expect = '<select name="regression_test">
 ';
 ok( $ckh->select('regression',
                 var_name     => 'regression_test',
-                subset       => [ 1, '2' ],
                 value        => '2',
+                subset       => [ 1, '2' ],
+                options      => 'onchange="submit()"',
                 blank_prompt => '(None)'
                 ), $expect );
 
 # Radiobox options.
-$expect = '<input type="radio" name="rt" value="">(None)<br>
-<input type="radio" name="rt" value="1">Monday<br>
-<input type="radio" name="rt" value="2" checked>Tuesday';
+$expect = '<input type="radio" name="rt" onchange="submit()" value="">(None)<br>
+<input type="radio" name="rt" onchange="submit()" value="1">Monday<br>
+<input type="radio" name="rt" onchange="submit()" value="2" checked>Tuesday';
 ok( $ckh->radio('regression',
                 var_name     => 'rt',
-                subset       => [ 1, '2' ],
                 default      => '2',
+                subset       => [ 1, '2' ],
+                options      => 'onchange="submit()"',
                 blank_prompt => '(None)'
                 ), $expect);
 
 # Select multiple options.
-$expect= '<select multiple name="reg_test[]" size="10">
+$expect= '<select multiple name="reg_test[]" onchange="submit()" size="10">
 <option value="1">Monday
 <option value="2" selected>Tuesday
 <option value="3" selected>Wednesday
@@ -96,19 +100,21 @@ $expect= '<select multiple name="reg_test[]" size="10">
 ';
 ok( $ckh->multiple('regression',
                 var_name => 'reg_test',
-                subset   => [ 1, '2', 3 ],
                 value    => [ '2', 3 ],
+                subset   => [ 1, '2', 3 ],
+                options  => 'onchange="submit()"',
                 size     => 10
                 ), $expect);
 
 # Checkbox options.
-$expect = '<input type="checkbox" name="checkbox_test[]" value="1" checked>Monday<br>
-<input type="checkbox" name="checkbox_test[]" value="2">Tuesday<br>
-<input type="checkbox" name="checkbox_test[]" value="3" checked>Wednesday';
+$expect = '<input type="checkbox" name="checkbox_test[]" onchange="submit()" value="1" checked>Monday<br>
+<input type="checkbox" name="checkbox_test[]" onchange="submit()" value="2">Tuesday<br>
+<input type="checkbox" name="checkbox_test[]" onchange="submit()" value="3" checked>Wednesday';
 ok( $ckh->checkbox('regression',
                 var_name => 'checkbox_test',
-                subset   => [ 1, '2', 3 ],
                 value    => [ '1', 3 ],
+                subset   => [ 1, '2', 3 ],
+                options  => 'onchange="submit()"'
                 ), $expect);
 
 # Clean up old data.

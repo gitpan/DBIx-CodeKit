@@ -26,28 +26,29 @@
 #
 ### HTML select common options:
 #
-#               var_name      => $code_set
-#               value         => $_POST[$var_name]
-#               subset        => array('just', 'certain', 'codes')
-#               'default'     => '42'
+#               'var_name'      => 'start_day'
+#               'value'         => $start_day
+#               'default'       => 1
+#               'subset'        => array( 1, 2, 3, 4, 5 )
+#               'options'       => 'onchange="submit()"'
 #
 ### HTML select single value methods:
 # 
 # $str = $ck->select($code_set, $param=array());
-#               select_prompt => "Code set description?"
-#               blank_prompt  => "None"
+#               'select_prompt' => "Code set description?"
+#               'blank_prompt'  => "None"
 #
 # $str = $ck->radio($code_set, $param=array());
-#               blank_prompt  => "None"
-#               sep           => "<br>\n"
+#               'blank_prompt'  => "None"
+#               'sep'           => "<br>\n"
 #
 ### HTML select multiple value methods:
 #
 # $str = $ck->multiple($code_set, $param=array());
-#               size          => 10
+#               'size'          => 10
 #
 # $str = $ck->checkbox($code_set, $param=array());
-#               sep           => "<br>\n"
+#               'sep'           => "<br>\n"
 #
 ### Code sets:
 #
@@ -70,14 +71,23 @@
 class CodeKit {
 
     var $dbh;           # Library handle.
-    var $lib_type;      # Library type: pear | phplib.
+    var $lib_type;      # Library type: pear | adodb | phplib.
     var $table;         # Code table name.
 
     function CodeKit($dbh, $param=array()) {
+
+        $this->dbh = $dbh;
         if (!is_object($dbh))
             die('CodeKit($dbh): $dbh is not an object');
-        $this->dbh = $dbh;
-        $this->lib_type = isset($dbh->Database) ? 'phplib' : 'pear';
+        if (isset($dbh->databaseType))
+            $this->lib_type = 'adodb';
+        elseif (isset($dbh->Database))
+            $this->lib_type = 'phplib';
+        elseif (isset($dbh->connection))
+            $this->lib_type = 'pear';
+        else
+            die('CodeKit($dbh): $dbh is not a pear/adodb/phplib handle');
+
         $this->table = $param['table'] ? $param['table'] : 'ck_code';
     }
 
@@ -132,6 +142,7 @@ class CodeKit {
         $value         = $param['value'];
         $default       = $param['default'];
         $subset        = $param['subset'];
+        $options       = $param['options'];
         $select_prompt = $param['select_prompt'];
         $blank_prompt  = $param['blank_prompt'];
 
@@ -145,9 +156,10 @@ class CodeKit {
             $Subset = array();
             foreach ( $subset as $val ) $Subset[$val] = 1;
         }
+        if ($options) $options = " $options";
 
         # Drop down box.
-        $select = "<select name=\"$var_name\">\n";
+        $select = "<select name=\"$var_name\"$options>\n";
 
         # Blank options.
         $selected = '';
@@ -195,6 +207,7 @@ class CodeKit {
         $value        = $param['value'];
         $default      = $param['default'];
         $subset       = $param['subset'];
+        $options       = $param['options'];
         $blank_prompt = $param['blank_prompt'];
         $sep          = $param['sep'];
 
@@ -208,18 +221,19 @@ class CodeKit {
             $Subset = array();
             foreach ( $subset as $val ) $Subset[$val] = 1;
         }
+        if ($options) $options = " $options";
         if (!isset($sep)) $sep = "<br>\n";
 
         # Blank options.
         if ($value == '') {
             $selected = 1;
             if ($blank_prompt <> '') {
-                $select .= "<input type=\"radio\" name=\"$var_name\"";
+                $select .= "<input type=\"radio\" name=\"$var_name\"$options";
                 $select .= " value=\"\" checked>$blank_prompt";
             }
         } else {
             if ($blank_prompt <> '') {
-                $select .= "<input type=\"radio\" name=\"$var_name\"";
+                $select .= "<input type=\"radio\" name=\"$var_name\"$options";
                 $select .= " value=\"\">$blank_prompt";
             }
         }
@@ -234,11 +248,11 @@ class CodeKit {
             if ( $code_code == $value ) {
                 if ($select) $select .= $sep;
                 $selected = 1;
-                $select .= "<input type=\"radio\" name=\"$var_name\"";
+                $select .= "<input type=\"radio\" name=\"$var_name\"$options";
                 $select .= " value=\"$code_code\" checked>$code_desc";
             } elseif ($row[3] <> 'd') {
                 if ($select) $select .= $sep;
-                $select .= "<input type=\"radio\" name=\"$var_name\"";
+                $select .= "<input type=\"radio\" name=\"$var_name\"$options";
                 $select .= " value=\"$code_code\">$code_desc";
             }
         }
@@ -246,7 +260,7 @@ class CodeKit {
         # Show missing values.
         if (!$selected) {
             if ($select) $select .= $sep;
-            $select .= "<input type=\"radio\" name=\"$var_name\"";
+            $select .= "<input type=\"radio\" name=\"$var_name\"$options";
             $select .= " value=\"$value\" checked>$value";
         }
 
@@ -265,6 +279,7 @@ class CodeKit {
         $value    = $param['value'];
         $default  = $param['default'];
         $subset   = $param['subset'];
+        $options       = $param['options'];
         $size     = $param['size'];
 
         # Variable name.
@@ -283,9 +298,10 @@ class CodeKit {
             $Subset = array();
             foreach ( $subset as $val ) $Subset[$val] = 1;
         }
+        if ($options) $options = " $options";
 
         # Select multiple box.
-        $select = "<select multiple name=\"$var_name"."[]\"";
+        $select = "<select multiple name=\"$var_name"."[]\"$options";
         if ($size) $select .= " size=\"$size\"";
         $select .= ">\n";
 
@@ -322,6 +338,7 @@ class CodeKit {
         $value    = $param['value'];
         $default  = $param['default'];
         $subset   = $param['subset'];
+        $options       = $param['options'];
         $sep      = $param['sep'];
 
         # Variable name.
@@ -340,6 +357,7 @@ class CodeKit {
             $Subset = array();
             foreach ( $subset as $val ) $Subset[$val] = 1;
         }
+        if ($options) $options = " $options";
         if (!isset($sep)) $sep = "<br>\n";
 
         # Show code set options.
@@ -352,12 +370,12 @@ class CodeKit {
             if ( $Value[$code_code] ) {
                 if ($select) $select .= $sep;
                 $select .= "<input type=\"checkbox\" name=\"$var_name"."[]\"";
-                $select .= " value=\"$code_code\" checked>$code_desc";
+                $select .= "$options value=\"$code_code\" checked>$code_desc";
                 unset($Value[$code_code]);
             } elseif ($row[3] <> 'd') {
                 if ($select) $select .= $sep;
                 $select .= "<input type=\"checkbox\" name=\"$var_name"."[]\"";
-                $select .= " value=\"$code_code\">$code_desc";
+                $select .= "$options value=\"$code_code\">$code_desc";
             }
         }
 
@@ -365,7 +383,7 @@ class CodeKit {
         foreach ( $Value as $code_code => $true ) {
             if ($select) $select .= $sep;
             $select .= "<input type=\"checkbox\" name=\"$var_name"."[]\"";
-            $select .= " value=\"$code_code\" checked>$code_code";
+            $select .= "$options value=\"$code_code\" checked>$code_code";
         }
 
         return $select;
@@ -493,6 +511,7 @@ class CodeKit {
     #
     function _query($query) {
         $result = array();
+
         if ($this->lib_type == 'pear') {
             $dbq = $this->dbh->query($query);
             if (DB::isError($dbq))
@@ -504,13 +523,28 @@ class CodeKit {
                 }
                 $dbq->free();
             }
-        } elseif ($this->lib_type == 'phplib') {
-            $this->dbh->query($query);
-            while ($this->dbh->next_record()) {
-                $result[] = $this->dbh->Record;
+
+        } elseif ($this->lib_type == 'adodb') {
+            $rs = $this->dbh->Execute($query);
+            if ($rs) {
+                if ($rs->connection) {
+                    $result = $rs->GetRows();
+                    $rs->Close();
+                }
+            } else {
+                die("CodeKit: " . $this->dbh->ErrorMsg() . ". query($query)");
             }
-            $this->dbh->free();
+
+        } elseif ($this->lib_type == 'phplib') {
+            $dbh = $this->dbh;
+            $dbh->query($query);
+            while ($dbh->next_record()) {
+                $result[] = $dbh->Record;
+            }
+            $dbh->free();
+
         }
+
         return $result;
     }
 

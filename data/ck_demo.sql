@@ -1,6 +1,4 @@
 
-INSERT INTO ck_code VALUES ('code_set','code_set','code set',-1,'');
-
 INSERT INTO ck_code VALUES ('code_set','country','country',0,'');
 INSERT INTO ck_code VALUES ('country','ae','United Arab Emirates',0,'');
 INSERT INTO ck_code VALUES ('country','ag','Antigua and Barbuda',0,'');

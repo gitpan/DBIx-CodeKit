@@ -88,7 +88,8 @@ sub cka_admin_header {
     ";
 
     print $ckh->select('code_set',
-        blank_prompt  => 'All Codes'
+        blank_prompt  => 'All Codes',
+        options       => 'onchange="submit()"'
     );
 
     print "

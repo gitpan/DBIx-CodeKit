@@ -5,7 +5,7 @@ use warnings;
 use Carp;
 
 use vars qw( $VERSION );
-$VERSION = '1.04';
+$VERSION = '1.05';
 
 =head1 NAME
 
@@ -23,7 +23,7 @@ DBIx::CodeKit - Universal Code Table Interface
 
 =cut
 
-# See the rest of the pod documentation at the end of this file.
+###  See the rest of the pod documentation at the end of this file.  ###
 
 sub new {
     my $class = shift;
@@ -94,17 +94,19 @@ sub select {
     my $value         = $args->{value};
     my $default       = $args->{default};
     my $subset        = $args->{subset};
+    my $options       = $args->{options};
     my $select_prompt = $args->{select_prompt};
     my $blank_prompt  = $args->{blank_prompt};
 
     # Variable setup.
     $value            = $self->_getparam($var_name, $value, $default);
     my $Subset        = &keyme($subset);
+    $options          = $options ? " $options" : '';
     $select_prompt    = '' unless defined $select_prompt;
     $blank_prompt     = '' unless defined $blank_prompt;
 
     # Drop down box.
-    my $select = "<select name=\"$var_name\">\n";
+    my $select = "<select name=\"$var_name\"$options>\n";
 
     # Blank options.
     my $selected = '';
@@ -152,12 +154,14 @@ sub radio {
     my $value         = $args->{value};
     my $default       = $args->{default};
     my $subset        = $args->{subset};
+    my $options       = $args->{options};
     my $blank_prompt  = $args->{blank_prompt};
     my $sep           = $args->{sep};
 
     # Variable setup.
     $value            = $self->_getparam($var_name, $value, $default);
     my $Subset        = &keyme($subset);
+    $options          = $options ? " $options" : '';
     $blank_prompt     = '' unless defined $blank_prompt;
     $sep              = "<br>\n" unless defined $sep;
 
@@ -167,12 +171,12 @@ sub radio {
     if ($value eq '') {
         $selected = 1;
         if ($blank_prompt ne '') {
-            $select .= "<input type=\"radio\" name=\"$var_name\"";
+            $select .= "<input type=\"radio\" name=\"$var_name\"$options";
             $select .= " value=\"\" checked>$blank_prompt";
         }
     } else {
         if ($blank_prompt ne '') {
-            $select .= "<input type=\"radio\" name=\"$var_name\"";
+            $select .= "<input type=\"radio\" name=\"$var_name\"$options";
             $select .= " value=\"\">$blank_prompt";
         }
     }
@@ -186,11 +190,11 @@ sub radio {
         if ( $code_code eq $value ) {
             $selected = 1;
             $select .= $sep if $select;
-            $select .= "<input type=\"radio\" name=\"$var_name\"";
+            $select .= "<input type=\"radio\" name=\"$var_name\"$options";
             $select .= " value=\"$code_code\" checked>$code_desc";
         } elsif ($row->[3] ne 'd') {
             $select .= $sep if $select;
-            $select .= "<input type=\"radio\" name=\"$var_name\"";
+            $select .= "<input type=\"radio\" name=\"$var_name\"$options";
             $select .= " value=\"$code_code\">$code_desc";
         }
     }
@@ -198,7 +202,7 @@ sub radio {
     # Show missing values.
     if (!$selected) {
         $select .= $sep if $select;
-        $select .= "<input type=\"radio\" name=\"$var_name\"";
+        $select .= "<input type=\"radio\" name=\"$var_name\"$options";
         $select .= " value=\"$value\" checked>$value";
     }
 
@@ -217,14 +221,16 @@ sub multiple {
     my $value         = $args->{value};
     my $default       = $args->{default};
     my $subset        = $args->{subset};
+    my $options       = $args->{options};
     my $size          = $args->{size};
 
     # Variable setup.
     my $Value         = $self->_getparams($var_name, $value, $default);
     my $Subset        = &keyme($subset);
+    $options          = $options ? " $options" : '';
 
     # Select multiple box.
-    my $select = "<select multiple name=\"$var_name"."[]\"";
+    my $select = "<select multiple name=\"$var_name"."[]\"$options";
     $select .= " size=\"$size\"" if ($size);
     $select .= ">\n";
 
@@ -260,11 +266,13 @@ sub checkbox {
     my $value         = $args->{value};
     my $default       = $args->{default};
     my $subset        = $args->{subset};
+    my $options       = $args->{options};
     my $sep           = $args->{sep};
 
     # Variable setup.
     my $Value         = $self->_getparams($var_name, $value, $default);
     my $Subset        = &keyme($subset);
+    $options          = $options ? " $options" : '';
     $sep              = "<br>\n" unless defined $sep;
 
     # Show code set options.
@@ -277,12 +285,12 @@ sub checkbox {
         if ( $Value->{$code_code} ) {
             $select .= $sep if $select;
             $select .= "<input type=\"checkbox\" name=\"$var_name"."[]\"";
-            $select .= " value=\"$code_code\" checked>$code_desc";
+            $select .= "$options value=\"$code_code\" checked>$code_desc";
             delete $Value->{$code_code};
         } elsif ($row->[3] ne 'd') {
             $select .= $sep if $select;
             $select .= "<input type=\"checkbox\" name=\"$var_name"."[]\"";
-            $select .= " value=\"$code_code\">$code_desc";
+            $select .= "$options value=\"$code_code\">$code_desc";
         }
     }
 
@@ -290,7 +298,7 @@ sub checkbox {
     for my $code_code ( keys %$Value ) {
         $select .= $sep if $select;
         $select .= "<input type=\"checkbox\" name=\"$var_name"."[]\"";
-        $select .= " value=\"$code_code\" checked>$code_code";
+        $select .= "$options value=\"$code_code\" checked>$code_code";
     }
 
     return $select;
@@ -507,6 +515,7 @@ __END__
          value         => $start_day
          default       => 1
          subset        => [ 1, 2, 3, 4, 5 ]
+         options       => 'onchange="submit()"'
  
 =head2 HTML select single value methods
   
@@ -550,7 +559,10 @@ CodeKit is an interface to a universal database code table.
 CodeKit takes all of the programming work out of maintaining
 multiple database code definition sets.
 
-No database project should be without one!
+The code administration page lets you define new virtual
+code tables and enter all codes and their descriptions.
+Perl and PHP classes retrieve the code descriptions and
+automatically generate HTML code selection elements.
 
 For news and updates visit the CodeKit home page:
 
