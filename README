@@ -1,11 +1,14 @@
 
-CodeKit Version 1.03 released 2003.04.02.
+CodeKit Version 1.04 released 2003.04.03.
 
 CodeKit is an interface to a universal database code table.
 CodeKit takes all of the programming work out of maintaining
 multiple database code definition sets.
 
-No database project should be without one!
+The code administration page lets you define new virtual
+code tables and enter all codes and their descriptions.
+Perl and PHP classes retrieve the code descriptions and
+automatically generate HTML code selection elements. 
 
 For news and updates visit the CodeKit home page:
 
