@@ -1,4 +1,4 @@
-#!/usr/bin/php4 -q
+#!/usr/bin/env php4
 <?php
 
 # You must configure ck_connect.pl to connect with
@@ -28,8 +28,8 @@ function ok($got, $expect = 'NO SECOND ARG') {
     }
 }
 
-require_once('../ck_connect.inc');
-require_once("../CodeKit.php");
+require_once('ck_connect.inc');
+require_once("CodeKit.php");
 ok(1);
 
 $dbh = ck_connect();

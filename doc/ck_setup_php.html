@@ -41,8 +41,7 @@ The CodeKit PHP source code is in the php directory:
     ck_admin_main.inc  - CodeKit Administration page.
     ck_connect.inc     - Database connection setup.
     ck_demo.php        - CodeKit demo page.
-    TEST               - Run t/test.t
-    t/test.t           - Regression testing.
+    regression.test    - Regression test.
 </pre>
 
 CodeKit requires the PEAR DB library or phplib.
@@ -69,7 +68,7 @@ should be set up to autocommit.
 
 <p>
 ck_connect.inc is used by ck_admin.php, ck_demo.php
-and by t/test.t.
+and by regression.test.
 
 
 <h4>3. CodeKit.php Installation</h4>
@@ -78,9 +77,8 @@ Copy the CodeKit.php file into a directory on your php
 include_path so that your application code can require it. 
 
 <p>
-Run the TEST script to test the basic CodeKit class
-functions.  This WILL FAIL unless you have completed
-the above steps!!!
+Run regression.test on the basic CodeKit class functions.
+This will fail unless you have completed the above steps!
 
 
 <h4>4. CodeKit Administration Page Setup</h4>

@@ -1,5 +1,0 @@
-
-for i in t/*.t; do
-    echo -e "$i:\n"
-    $i
-done

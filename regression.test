@@ -4,6 +4,7 @@
 # your database.
 #
 # You must also set up the ck_code table schema.
+# and load data/ck_setup.core before this will run.
 
 use Test;
 BEGIN { plan tests => 21 };
@@ -11,8 +12,6 @@ BEGIN { plan tests => 21 };
 use strict;
 use warnings;
 use lib 'blib/lib';
-use lib '../blib/lib';
-use lib '..';
 use DBI;
 use DBIx::CodeKit;
 require("ck_connect.pl");

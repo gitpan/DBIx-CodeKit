@@ -1,5 +1,8 @@
 
-CodeKit Version 1.06 released 2003.05.07.
+CodeKit Universal Database Code Table
+-------------------------------------
+
+CodeKit Version 1.07 released 2003.05.12.
 
 CodeKit is an interface to a universal database code table.
 CodeKit takes all of the programming work out of maintaining
@@ -32,8 +35,5 @@ to report bugs, request features, or for database
 design and programming assistance.
 
 Copyright (C) 2003 John Gorman.  All rights reserved.
-This program is free software; you can redistribute
-it and/or modify it under the Lesser GNU General Public
-License (LGPL) of the Free Software Foundation.
-This means that you can use it for any project.
-If you do, send me a note saying how it went!
+This program is free software; you can redistribute it
+and/or modify it under the same terms as Perl or the LGPL.

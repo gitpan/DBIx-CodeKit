@@ -5,7 +5,7 @@ use warnings;
 use Carp;
 
 use vars qw( $VERSION );
-$VERSION = '1.06';
+$VERSION = '1.07';
 
 =head1 NAME
 
@@ -568,6 +568,8 @@ For news and updates visit the CodeKit home page:
 
 http://www.webbysoft.com/codekit
 
+=head1 SEE ALSO
+
 For a full featured multilingual universal code table
 visit the BabelKit home page:
 
@@ -582,8 +584,5 @@ design and programming assistance.
 =head1 COPYRIGHT
 
 Copyright (C) 2003 John Gorman.  All rights reserved.
-This program is free software; you can redistribute
-it and/or modify it under the Lesser GNU General Public
-License (LGPL) of the Free Software Foundation.
-This means that you can use it for any project.
-If you do, send me a note saying how it went!
+This program is free software; you can redistribute it
+and/or modify it under the same terms as Perl or the LGPL.
