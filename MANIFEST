@@ -1,3 +1,4 @@
+CHANGELOG
 MANIFEST
 README
 data/ck_demo.sql
@@ -5,6 +6,7 @@ data/ck_demo.tab
 data/ck_schema.mysql
 data/ck_setup.core
 doc/ck_admin.html
+doc/ck_faq.html
 doc/ck_new_perl.html
 doc/ck_new_php.html
 doc/ck_overview.html

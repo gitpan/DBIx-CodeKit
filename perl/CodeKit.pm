@@ -5,7 +5,7 @@ use warnings;
 use Carp;
 
 use vars qw( $VERSION );
-$VERSION = '1.05';
+$VERSION = '1.06';
 
 =head1 NAME
 
@@ -583,11 +583,7 @@ design and programming assistance.
 
 Copyright (C) 2003 John Gorman.  All rights reserved.
 This program is free software; you can redistribute
-it and/or modify it under the GNU General Public License
-(GPL) of the Free Software Foundation.
-
-As a practical matter this means that you can use this
-software in house or as part of your web site.  If you
-want to distribute this as part of a proprietary package
-ask me for a commercial license.
-
+it and/or modify it under the Lesser GNU General Public
+License (LGPL) of the Free Software Foundation.
+This means that you can use it for any project.
+If you do, send me a note saying how it went!
